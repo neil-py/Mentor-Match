@@ -197,34 +197,20 @@
 
     .manage-user-user-box {
         background-color: #fff;
-        padding: 20px;
+        padding: 10px;
         margin-bottom: 15px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
         display: flex;
         justify-content: space-between;
-        
+
     }
 
     .manage-user-user-info {
         display: flex;
         align-items: space-between;
         max-width: 100%;
-    }
-
-    .user-circle-list {
-        width: 60px;
-        /* Set the same value for width and height */
-        height: 60px;
-        /* Set the same value for width and height */
-        background-color: #ccc;
-        border-radius: 50%;
-        margin-bottom: 10px;
-        /* Center the circle horizontally and vertically */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 10%;
+        margin-left: 10px;
     }
 
     .manage-user-user-info p {
@@ -235,33 +221,41 @@
     }
 
     .account-type-lable {
-        padding: 20px;
+        margin: auto;
         background-color: #EEC148;
         border-radius: 5px;
         font-weight: bold;
+    }
+
+    .manage-user-manage-button-container {
+        margin-left: auto;
+        /* Align the button to the right */
     }
 
     .manage-user-manage-button {
         background-color: #5A110C;
         color: #fff;
         border: none;
-        padding: 10px !important; 
+        padding: 15px;
+        /* Adjust padding as needed */
         border-radius: 5px;
         cursor: pointer;
         font-size: 18px;
+        margin-top: 15px;
     }
 
     .user-circle-list {
         width: 60px;
-        height: 50px;
+        height: 60px;
         background-color: #ccc;
         border-radius: 50%;
         margin-bottom: 10px;
+        margin-top: 10px;
         /* Center the circle horizontally and vertically */
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 10%;
+
     }
 
     .user-name {
@@ -312,7 +306,10 @@
                         <p class="user-name">{{ user.first_name + " " + user.last_name}}</p>
                         <p class="account-type-lable">{{ account_type[user.account_status] }}</p>
                     </div>
-                    <button class="manage-user-manage-button" onclick="location.href = '#';">MANAGE</button>
+                    <div class="manage-user-manage-button-container">
+                        <button class="manage-user-manage-button" onclick="location.href = '#';">MANAGE</button>
+                    </div>
+                    
                 </div>
             {% endfor %}
         `;
