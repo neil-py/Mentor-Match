@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="dashboard-container">
+    <!-- Admin Info -->
+    <div class="admin-info">
+        <p>{{account_type[current_user.account_status]}}</p>
+        <div class="user-circle"></div>
+        <div class="user-info">
+            <h3>{{current_user.first_name + " " + current_user.last_name}}</h3>
+            <p>{{current_user.program}}</p>
+        </div>
+    </div>
+
+    <!-- Dashboard buttons -->
+    <button class="dashboard-button" id="manageUsersBtn">MANAGE USERS</button>
+    <button class="dashboard-button" id="manageSessionsBtn">MANAGE SESSIONS</button>
+    <button class="dashboard-button" id="tutorApplicationBtn">TUTOR APPLICATIONS</button>
+</div>
+
+<div class="content">
+    <!-- Content for different dashboard sections goes here -->
+    <div class="welcome-message">
+        <h1>Welcome {{current_user.first_name}}</h1>
+        <p>This is your admin dashboard. You can manage users, sessions, and tutor applications using the buttons on the
+            left.</p>
+    </div>
+
+    <!-- Manage Users Content (hidden by default) -->
+    <div class="manage-user-container" id="manageUsersContent" style="display: none;">
+        <div class="header">
+            <input type="text" class="manage-user-search-bar" placeholder="Search users...">
+            <select class="manage-user-filter-dropdown">
+                <option value="all">All</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
+
+        <div class="manage-user-user-box">
+            <div class="manage-user-user-info">
+                <img src="user-avatar.jpg" alt="User Avatar" width="40">
+                <p>User Name</p>
+                <p>(Active)</p>
+            </div>
+            <button class="manage-button">Manage</button>
+        </div>
+
+        <div class="manage-user-user-box">
+            <div class="manage-user-user-info">
+                <img src="user-avatar.jpg" alt="User Avatar" width="40">
+                <p>User Name</p>
+                <p>(Inactive)</p>
+            </div>
+            <button class="manage-user-manage-button">Manage</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Admin Dashboard Styles */
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: #FFF6DD;
+    }
+
+    .dashboard-container {
+        background-color: #371513;
+        height: 100%;
+        /* Set a fixed vertical height, e.g., 100% of the viewport height */
+        position: fixed;
+        width: 20%;
+        /* Roughly 1/4 of the screen */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        /* Center content vertically */
+        padding: 20px;
+
+        top: 1;
+    }
+
+    .admin-info {
+        color: #FFE085;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-top: -50%;
+    }
+
+    .user-circle {
+        width: 120px;
+        height: 120px;
+        background-color: #ccc;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        /* Center the circle horizontally and vertically */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 10%;
+    }
+
+
+    .user-info {
+        text-align: center;
+    }
+
+    .user-info h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .dashboard-button {
+        font-size: 20px;
+        background-color: #FFF2CA;
+        color: #000000;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 0;
+        cursor: pointer;
+        text-align: center;
+        min-width: 80%;
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Content styles */
+    .content {
+        margin-left: 23%;
+        /* Adjust this margin based on the dashboard width */
+        padding: 10px;
+    }
+
+    .welcome-message {
+        text-align: center;
+        background-color: #FFF2CA;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-message h1 {
+        font-size: 32px;
+        color: #000000;
+    }
+
+    .welcome-message p {
+        font-size: 18px;
+        color: #000000;
+    }
+
+    .manage-user-container {
+        max-width: 100%;
+        min-height: 65vh;
+        max-height: 65vh;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #E8DFC7;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow-y: auto;
+        /* Add this line to enable vertical scrolling */
+    }
+
+    .manage-user-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .manage-user-search-bar {
+        width: 60%;
+        padding: 10px;
+        border: 1px solid #C4B381;
+        background-color: #C4B381;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .manage-user-filter-dropdown {
+        width: 28%;
+        padding: 10px;
+        border: 1px solid #01161E;
+        background-color: #01161E;
+        color: #fff;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .manage-user-user-box {
+        background-color: #fff;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        
+    }
+
+    .manage-user-user-info {
+        display: flex;
+        align-items: space-between;
+        max-width: 100%;
+    }
+
+    .user-circle-list {
+        width: 60px;
+        /* Set the same value for width and height */
+        height: 60px;
+        /* Set the same value for width and height */
+        background-color: #ccc;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        /* Center the circle horizontally and vertically */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 10%;
+    }
+
+    .manage-user-user-info p {
+        padding: 10px;
+        font-size: 16px;
+
+        /* Adjust the font size as needed */
+    }
+
+    .account-type-lable {
+        padding: 20px;
+        background-color: #EEC148;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .manage-user-manage-button {
+        background-color: #5A110C;
+        color: #fff;
+        border: none;
+        padding: 10px !important; 
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    .user-circle-list {
+        width: 60px;
+        height: 50px;
+        background-color: #ccc;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        /* Center the circle horizontally and vertically */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 10%;
+    }
+
+    .user-name {
+        margin-left: 10px;
+        font-size: 16px;
+        white-space: nowrap;
+        /* Prevent text from wrapping */
+    }
+</style>
+
+<script>
+    const manageUsersBtn = document.getElementById('manageUsersBtn');
+    const manageSessionsBtn = document.getElementById('manageSessionsBtn');
+    const tutorApplicationBtn = document.getElementById('tutorApplicationBtn');
+    const content = document.querySelector('.content');
+    const manageUsersContent = document.getElementById('manageUsersContent');
+
+    function clearContent() {
+        content.innerHTML = ''; // Clear existing content
+    }
+
+    function clearButtonClear() {
+        manageUsersBtn.style.backgroundColor = '#FFF2CA';
+        manageSessionsBtn.style.backgroundColor = '#FFF2CA';
+        tutorApplicationBtn.style.backgroundColor = '#FFF2CA';
+    }
+
+    // Event listeners for dashboard buttons
+    manageUsersBtn.addEventListener('click', () => {
+        clearContent();
+        // Add content for "Manage Users" section here
+        content.innerHTML = `
+        <h1>Manage Users</h1>
+        <div class="manage-user-container" id="manageUsersContent" style="display: block;">
+            <div class="header">
+                <input type="text" class="manage-user-search-bar" placeholder="Search users...">
+                <select class="manage-user-filter-dropdown">
+                    <option value="all">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            {% for user in users %}
+                <div class="manage-user-user-box">
+                    <div class="manage-user-user-info">
+                        <div class="user-circle-list"></div>
+                        <p class="user-name">{{ user.first_name + " " + user.last_name}}</p>
+                        <p class="account-type-lable">{{ account_type[user.account_status] }}</p>
+                    </div>
+                    <button class="manage-user-manage-button" onclick="location.href = '#';">MANAGE</button>
+                </div>
+            {% endfor %}
+        `;
+        clearButtonClear();
+        manageUsersBtn.style.backgroundColor = '#AC8616';
+        manageUsersContent.style.display = 'block';
+    });
+
+    manageSessionsBtn.addEventListener('click', () => {
+        clearContent();
+        // Add content for "Manage Sessions" section here
+        content.innerHTML = '<h1>Manage Sessions</h1>';
+        clearButtonClear();
+        manageSessionsBtn.style.backgroundColor = '#AC8616'; // Change the clicked button color
+        manageUsersContent.style.display = 'none'; // Hide the "Manage Users" content
+    });
+
+    tutorApplicationBtn.addEventListener('click', () => {
+        clearContent();
+        // Add content for "Tutor Application" section here
+        content.innerHTML = '<h1>Tutor Application</h1>';
+        clearButtonClear();
+        tutorApplicationBtn.style.backgroundColor = '#AC8616'; // Change the clicked button color
+        manageUsersContent.style.display = 'none'; // Hide the "Manage Users" content
+    });
+</script>
+
+{% endblock %}

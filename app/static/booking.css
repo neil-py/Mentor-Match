@@ -1,0 +1,138 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    background: #8B0000;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.tutor-profile {
+    text-align: center;
+}
+
+.tutor-profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.specializations .tag,
+.send-request,
+.tag.c-plus-plus {
+    background: #D3D3D3;
+    border: none;
+    padding: 5px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.schedule h2 {
+    text-align: center;
+}
+
+.week {
+    display: flex;
+    justify-content: space-around;
+    background: #FFF8DC;
+    padding: 10px;
+}
+
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.time-slots .time-slot {
+    background: #FFFFE0;
+    border: 1px solid #D3D3D3;
+    padding: 15px;
+    text-align: center;
+}
+
+.time-slots .taken {
+    background: #A52A2A;
+    color: white;
+}
+
+.send-request {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #8B0000;
+    color: white;
+    text-align: center;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+footer {
+    background: #F5F5F5;
+    padding: 10px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+
+    .week,
+    .time-slots {
+        display: block;
+    }
+
+    .time-slots .time-slot {
+        display: block;
+        width: 100%;
+    }
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: 20px;
+}
+
+.weekdays,
+.time-slots {
+    display: contents;
+}
+
+.weekday,
+.time-slot {
+    border: 1px solid #D3D3D3;
+    padding: 10px;
+    text-align: center;
+    background: #FFFFE0;
+}
+
+.weekday {
+    background: #FFF8DC;
+    font-weight: bold;
+}
+
+.time-slot.taken {
+    background: #A52A2A;
+    color: white;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .calendar {
+        display: block;
+    }
+
+    .weekday,
+    .time-slot {
+        display: block;
+        width: 100%;
+    }
+}

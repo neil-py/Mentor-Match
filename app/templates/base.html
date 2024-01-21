@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Match</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+</head>
+<style>
+    body {
+        font-family: Montserrat;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar {
+        top: 0;
+        left: 0;
+        background-color: #5A110C;
+        color: #FFE085;
+        display: flex;
+        font-size: 25px;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo img {
+        width: 15%;
+        height: 15%;
+        margin-right: 10px;
+    }
+
+    /* Use a div with three lines for the button */
+    .nav-button {
+        color: #FFE085;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Style the burger lines */
+    .nav-button div {
+        width: 30px;
+        height: 3px;
+        background-color: #FFE085;
+        margin: 3px 0;
+    }
+
+    .sidenav {
+        width: 300px;
+        background-color: #420D0A;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -300px;
+        /* Start from the right */
+        transition: right 0.3s;
+        /* Change 'left' to 'right' */
+    }
+
+    .sidenav a {
+        padding: 15px 25px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #FFE085;
+        display: block;
+    }
+
+    .nav-user-info {
+        color: #FFE085;
+        font-family: Montserrat;
+        display: flex;
+        align-items: center;
+        padding: 0px;
+    }
+
+    .circle {
+        width: 30px;
+        height: 30px;
+        background-color: #ccc;
+        border-radius: 50%;
+        margin-right: 20px;
+    }
+
+    .nav-user-info p {
+        font-size: 15px;
+        font-family: Montserrat;
+        margin: 0;
+    }
+
+    /* Add CSS for the "X" button */
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    /* Add CSS for the Logout link */
+    .logout-link {
+        position: absolute;
+        bottom: 10px;
+        /* Adjust as needed */
+        right: 10px;
+        /* Adjust as needed */
+        color: #fff;
+        text-decoration: none;
+        font-size: 18px;
+    }
+</style>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static',filename='logo.png') }}" alt="Logo" href="{{ url_for('home.home')}}">
+            <span>Mentor Match</span>
+        </div>
+        <!-- Use a div with three lines for the button -->
+        <div class="nav-button" id="toggleNav">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div class="sidenav" id="sideNav">
+        <span class="close-button" id="closeNav" onclick="closeNav()">&times;</span>
+    </br>
+        <a>
+            <div class="nav-user-info">
+                <div class="circle"></div>
+                <div>
+                    <p>{{account_type[current_user.account_status]}}</p>
+                    <p style="color: #fff">{{current_user.first_name + " " +current_user.last_name}}</p>
+                    <p>{{current_user.program}}</p>
+                </div>
+            </div>
+        </a>
+        <a href="{{url_for('home.home')}}">Home</a>
+        <a href="#">Edit Profile</a>
+        <a href="#">Settings</a>
+        {% if current_user.account_status == 3 %}
+        <a href="#">Be a Tutor Now!</a>
+        {% endif %}
+        <a href="{{url_for('authentication.logout')}}" class="logout-link">Logout</a>
+    </div>
+
+    {% block main %}
+    {% endblock %}
+
+    <script>
+        const toggleNavButton = document.getElementById('toggleNav');
+        const sideNav = document.getElementById('sideNav');
+
+        function openNav() {
+            sideNav.style.right = "0"; // Slide in from the right
+        }
+
+        function closeNav() {
+            sideNav.style.right = "-300px"; // Slide out to the right
+        }
+
+        toggleNavButton.addEventListener('click', openNav);
+
+        // Close side nav when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (event.target === sideNav) {
+                closeNav();
+            }
+        });
+    </script>
+</body>
+
+</html>

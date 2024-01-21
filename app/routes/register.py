@@ -24,7 +24,7 @@ def register():
         try:
             password = bcrypt.generate_password_hash(form.password.data)
             new_user = users.Users(
-                login_name=login_name,
+                login_name=login_name.lower(),
                 first_name=form.first_name.data,
                 last_name=form.last_name.data,
                 university_number=form.university_number.data,

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor Booking Page</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='booking.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <nav>
+                <!-- Navigation and Logo -->
+            </nav>
+            <h1>MENTOR MATCH</h1>
+        </header>
+
+        <section class="tutor-profile">
+            <h2>{{ tutor_info["first_name"] + " " + tutor_info["last_name"]}}</h2>
+            <p>{{ tutor_info["program"] }}</p>
+            <div class="specializations">
+                <span class="tag">PROGRAMMING</span>
+                <span class="tag">INFORMATION TECH</span>
+            </div>
+            <button class="tag c-plus-plus">C++</button>
+        </section>
+
+        <!-- Add this code inside the .schedule section -->
+        <section class="schedule">
+            <h2>PICK A DATE AND TIME</h2>
+            <div class="calendar">
+                <div class="weekdays">
+                    <div class="weekday">MONDAY<br>JANUARY 15, 2024</div>
+                    <div class="weekday">TUESDAY<br>JANUARY 16, 2024</div>
+                    <div class="weekday">WEDNESDAY<br>JANUARY 17, 2024</div>
+                    <div class="weekday">THURSDAY<br>JANUARY 18, 2024</div>
+                    <div class="weekday">FRIDAY<br>JANUARY 19, 2024</div>
+                </div>
+                <div class="time-slots">
+                    <div class="time-slot">8:00 AM</div>
+                    <div class="time-slot taken">TAKEN</div>
+                    <div class="time-slot taken">TAKEN</div>
+                    <!-- Repeat for other time slots -->
+                </div>
+                <!-- Repeat time-slots div for each row -->
+            </div>
+            <button class="send-request">SEND REQUEST</button>
+        </section>
+
+
+        <footer>
+            <!-- Footer content -->
+        </footer>
+    </div>
+
+</body>
+
+</html>

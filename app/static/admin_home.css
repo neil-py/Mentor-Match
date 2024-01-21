@@ -1,0 +1,74 @@
+:root {
+    --primary-color: #6F58C9;
+    --bg-color: #f3f3f3;
+    --paper-color: linear-gradient(345deg, rgba(255,255,255,1) 100%, rgba(245,245,245,1) 0%);;
+    --shadow-color: rgba(0,0,0,0.15);
+  }
+  
+  body {
+    display: grid;
+    block-size: 100vh;
+    grid-template-columns: 260px 1fr;
+    container-type: inline-size;
+  }
+  
+  nav {
+    background-color: var(--primary-color);
+    
+    @container (max-inline-size: 960px) {
+      block-size: 4rem;
+    }
+  }
+  
+  /* Defining the grid for main content area: */
+  
+  main {
+    background-color: var(--bg-color);
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    grid-auto-flow: dense;
+    grid-gap: 1rem;
+    
+  /* Container Queries for the main area */
+    @container (max-inline-size: 960px) {
+      block-size: 100vh;
+    }
+    
+    @container (max-inline-size: 680px) {
+      display: block;
+    }
+  }
+  
+  article {
+    background: var(--paper-color);
+    border-radius: 0.75rem;
+    box-shadow: 0px 2px 8px -4px var(--shadow-color);
+    
+    @container (max-inline-size: 680px) {
+      min-block-size: 96px;
+      margin-block-end: 1rem;
+    }
+  }
+  
+  .large {
+    grid-row: 1 / span 3;
+    grid-column: 1 / span 2;
+  }
+  
+  .wide {
+    grid-column: span 2;
+  }
+  
+  /* Only Media Query: */
+  
+  @media (max-width: 960px) {
+    body {
+      display: block;
+      overflow: scroll;
+    }
+  }
+  
+  
+  
+  

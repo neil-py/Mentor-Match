@@ -13,7 +13,6 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('home.home'))
     
-
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -22,14 +21,17 @@ def login():
         password = form.password.data
         user = users.Users.query.filter_by(login_name=login_name).first()
 
-        try:
-            if bcrypt.check_password_hash(user.password, password):
-                login_user(user)
-                return redirect(url_for('home.home'))
-            else:
-                flash("Invalid Username or password!", "danger")
-        except Exception as e:
-            flash(e, "danger")
+        if user:
+            try:
+                if bcrypt.check_password_hash(user.password, password):
+                    login_user(user)
+                    return redirect(url_for('home.home'))
+                else:
+                    flash("Invalid Username or password!", "danger")
+            except Exception as e:
+                flash(e, "danger")
+        else:
+            flash("User Does Not Exist.", "danger")
 
 
 
