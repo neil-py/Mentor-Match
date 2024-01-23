@@ -8,7 +8,7 @@ Prototype Verision 0.1 (developement on progress)
 Go to the app directory and use the package manager [pip](https://pip.pypa.io/en/stable/) to install the requirements.
 
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Usage
