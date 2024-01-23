@@ -26,3 +26,4 @@ Run the app locally try these routes
 - http://127.0.0.1:5000/logout - **Manually written as of now**
 - http://127.0.0.1:5000/admin/create-user - **Manually written as of now**
 
+test
