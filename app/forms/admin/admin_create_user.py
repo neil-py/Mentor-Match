@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, SelectField
 from wtforms.validators import InputRequired, Length, Email, ValidationError
 from app.models import users
 
@@ -11,8 +11,8 @@ class AdminCreateUserForm(FlaskForm):
     university_email = StringField('University Email', validators=[InputRequired(), Email(), Length(min=1, max=225)])
     program = StringField('Program', validators=[Length(max=100)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=1, max=100)])
-    account_status = IntegerField("Account Type [1:ADMIN, 2:TUTOR, 3:STUDENT/TUTEE]", validators=[InputRequired()])
-    create_user = SubmitField('Create User')
+    account_status = SelectField("Account Type", choices=[(1, "ADMIN"), (2, "TUTOR"), (3, "STUDENT")], validators=[InputRequired()])
+    create_user = SubmitField('CREATE USER')
 
 
     #perform checks if the login_name and email already exist in the database

@@ -33,8 +33,6 @@ def login():
         else:
             flash("User Does Not Exist.", "danger")
 
-
-
     return render_template("login.html", form=form)
 
 @authentication.route("/logout")

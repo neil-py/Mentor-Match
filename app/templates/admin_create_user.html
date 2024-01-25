@@ -1,68 +1,221 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="static/registration.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-
-</head>
-
-<body>
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-danger" role="alert">
-        {{message}}
-      </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-
+{% extends 'base.html' %}
+{% block main %}
+<!--
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger" role="alert">
+  {{message}}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+-->
+<div class="main-container">
+  <h1>CREATE USER</h1>
+  <div class="circle"></div>
   <form method="POST" action="{{ url_for('admin_creation_route.create_user') }}">
-    <div class="container">
-      <h1>Admin Create User</h1>
-      <p>testing</p>
-      <hr>
+    <div class="form-container">
 
       {{ form.hidden_tag() }}
 
-      <!-- Render each form field -->
-      {{ form.login_name.label }} {{ form.login_name(size=32, class="form-control", placeholder="Enter Login Name") }}
-      {{ form.first_name.label }} {{ form.first_name(size=32, class="form-control", placeholder="Enter First Name") }}
-      {{ form.last_name.label }} {{ form.last_name(size=32, class="form-control", placeholder="Enter Last Name") }}
-      {{ form.university_number.label }} {{ form.university_number(size=32, class="form-control", placeholder="Enter
-      Student Number") }}
-      {{ form.program.label }} {{ form.program(size=32, class="form-control", placeholder="Enter Program") }}
-      {{ form.university_email.label }} {{ form.university_email(size=32, class="form-control", placeholder="Enter
-      Email") }}
-      {{ form.account_status.label}} {{ form.account_status(size=32, class="form-control", placeholder="Enter Account Type") }}
+      <!-- Two columns for form fields -->
+      <div class="columns">
+        <div class="column">
+          <div class="input-group">
+            <span class="input-label">LOGIN NAME:</span>
+            {{ form.login_name(size=35, class="form-control", placeholder="ENTER LOGIN NAME") }}
+          </div>
 
-      {{ form.password.label }} {{ form.password(size=32, class="form-control", placeholder="Enter Password",
-      type="password") }}
-      {{ form.create_user(size=20, class="btn btn-success", type="submit")}}
-      
-      <hr>
+          <div class="input-group">
+            <span class="input-label">FIRST NAME:</span>
+            {{ form.first_name(size=35, class="form-control", placeholder="ENTER FIRST NAME") }}
+          </div>
 
-      <a href="{{ url_for('authentication.login')}}">Login</a>
+          <div class="input-group">
+            <span class="input-label">LAST NAME:</span>
+            {{ form.last_name(size=35, class="form-control", placeholder="ENTER LAST NAME") }}
+          </div>
+
+          <div class="input-group">
+            <span class="input-label">UNIVERSITY NUMBER:</span>
+            {{ form.university_number(size=35, class="form-control", placeholder="ENTER UNIVERSITY NUMBER") }}
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="input-group">
+            <span class="input-label">PROGRAM/ROLE:</span>
+            {{ form.program(size=35, class="form-control", placeholder="ENTER PROGRAM") }}
+          </div>
+
+          <div class="input-group">
+            <span class="input-label">UNIVERSITY EMAIL:</span>
+            {{ form.university_email(size=35, class="form-control", placeholder="ENTER EMAIL") }}
+          </div>
+
+          <div class="input-group">
+            <span class="input-label">ACCOUNT TYPE:</span>
+            {{ form.account_status(class="form-control", style="background-color: #C4B381; font-weight: bold;") }}
+          </div>
+
+          <div class="input-group">
+            <span class="input-label">PASSWORD:</span>
+            {{ form.password(size=35, class="form-control", placeholder="ENTER PASSWORD", type="password") }}
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="btn-group">
+      {{ form.create_user(size=20, class="btn btn-success", type="submit", style="font-weight: bold;")}}
+      <button class="btn-cancel" id="cancel-btn" style="font-weight: bold;">CANCEL</button>
+
+    </div>
+
   </form>
+</div>
 
 
+<style>
+  body {
+    background-color: #FFF6DD;
+  }
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-</body>
+  .main-container {
+    text-align: center;
+    padding: 60px;
+  }
 
-</html>
+  .form-container {
+    max-width: 1000px;
+    padding: 50px;
+    font-family: Montserrat;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #E8DFC7;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+
+  .circle {
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 0 auto;
+    /* Center horizontally */
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+
+  form {
+    margin: 20px;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  .btn-success {
+    background-color: #5A110C;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    min-width: 200px
+  }
+
+  .btn-cancel {
+    background-color: #371513;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    min-width: 200px
+  }
+
+  .btn-group {
+    margin-top: 20px;
+  }
+
+  .alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+  }
+
+  .alert-danger {
+    border: 1px solid #f5c6cb;
+  }
+
+  /* Style the input group to display the label and input field together */
+  .input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 1px;
+    background-color: #F5F5F5;
+    border-radius: 10px;
+
+  }
+
+  /* Style the label within the input group */
+  .input-label {
+    flex: 0 0 150px;
+    /* Adjust the width as needed */
+    font-weight: bold;
+    margin-right: 10px;
+    color: #A5A5A5;
+  }
+
+  /* Style the input field within the input group */
+  .form-control {
+    flex: 1;
+    min-width: 100px;
+    padding: 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    text-align: left;
+    background-color: #F5F5F5;
+  }
+
+  /* Style the placeholder text */
+  .form-control::placeholder {
+    color: #A5A5A5;
+    font-weight: normal;
+    /* Remove bold styling for placeholder */
+  }
+
+  .columns {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .column {
+    flex: 1;
+    margin-right: 20px;
+  }
+</style>
+<script>
+
+  const cancelBTN = document.getElementById("cancel-btn");
+
+  cancelBTN.onclick = function () {
+    location.href = "{{ url_for('admin_redirects.manage_users') }}"
+  }
+</script>
+
+{% endblock %}

@@ -12,48 +12,87 @@
     </div>
 
     <!-- Dashboard buttons -->
-    <button class="dashboard-button" id="manageUsersBtn">MANAGE USERS</button>
+    <button class="dashboard-button" id="manageUsersBtn"
+        style="background-color: {% if show_manage_users %} #AC8616 {% endif %};">MANAGE USERS</button>
     <button class="dashboard-button" id="manageSessionsBtn">MANAGE SESSIONS</button>
     <button class="dashboard-button" id="tutorApplicationBtn">TUTOR APPLICATIONS</button>
+    <button class="dashboard-button" id="activityLogsBtn"
+        style="background-color: {% if show_manage_logs %} #AC8616 {% endif %};">ACTIVITY LOGS</button>
 </div>
 
 <div class="content">
     <!-- Content for different dashboard sections goes here -->
-    <div class="welcome-message">
-        <h1>Welcome {{current_user.first_name}}</h1>
-        <p>This is your admin dashboard. You can manage users, sessions, and tutor applications using the buttons on the
-            left.</p>
-    </div>
-
-    <!-- Manage Users Content (hidden by default) -->
-    <div class="manage-user-container" id="manageUsersContent" style="display: none;">
-        <div class="header">
-            <input type="text" class="manage-user-search-bar" placeholder="Search users...">
-            <select class="manage-user-filter-dropdown">
-                <option value="all">All</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
-        </div>
-
-        <div class="manage-user-user-box">
-            <div class="manage-user-user-info">
-                <img src="user-avatar.jpg" alt="User Avatar" width="40">
-                <p>User Name</p>
-                <p>(Active)</p>
-            </div>
-            <button class="manage-button">Manage</button>
-        </div>
-
-        <div class="manage-user-user-box">
-            <div class="manage-user-user-info">
-                <img src="user-avatar.jpg" alt="User Avatar" width="40">
-                <p>User Name</p>
-                <p>(Inactive)</p>
-            </div>
-            <button class="manage-user-manage-button">Manage</button>
+    {% if not show_manage_users and not show_manage_logs %}
+    <div class="dash-info">
+        <div class="welcome-message">
+            <h1>Welcome {{current_user.first_name}}</h1>
+            <p>This is your admin dashboard. You can manage users, sessions, and tutor applications using the buttons on
+                the
+                left.</p>
         </div>
     </div>
+    {% endif %}
+    <!-- MANAGE USERS HIDDEN DEFAULT-->
+    <div id="manage-users" style="display: {% if show_manage_users %}block{% else %}none{% endif %};">
+        <h1>Manage Users</h1>
+        <div class="manage-block-container" id="manageUsersContent" style="display: block;">
+            <div class="header">
+                <input type="text" class="manage-block-search-bar" placeholder="Search users...">
+                <select class="manage-block-filter-dropdown">
+                    <option value="all">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            {% if users %}
+            {% for user in users %}
+            <div class="manage-block-user-box">
+                <div class="manage-block-user-info">
+                    <div class="user-circle-list"></div>
+                    <p class="user-name">{{ user.first_name + " " + user.last_name}}</p>
+                    <p class="account-type-lable">{{ account_type[user.account_status] }}</p>
+                </div>
+                <div class="manage-block-manage-button-container">
+                    <button class="manage-block-manage-button"
+                        onclick="location.href = '{{ url_for('admin_manage_route.manage_user', id=user.id)}}';">MANAGE</button>
+                </div>
+
+            </div>
+            {% endfor %}
+            {% else %}
+            <h1>No users found.</h1>
+            {% endif %}
+        </div>
+        <button class="manage-block-manage-button"
+            onclick="location.href = '{{url_for('admin_creation_route.create_user')}}';">CREATE NEW USER</button>
+    </div>
+
+    <!-- Manage LOGS-->
+    <div id="manage-block" style="display: {% if show_manage_logs %}block{% else %}none{% endif %};">
+        <h1>Manage Activity Logs</h1>
+        <div class="manage-block-container" id="manageUsersContent" style="display: block;">
+            {% if activity_logs %}
+            {% for log, user in activity_logs %}
+            <div class="manage-block-user-box">
+                <div class="manage-block-user-info">
+                    <p
+                        class=" {% if log.activity_type == 'USER CREATION' %} user-creation-label {% elif log.activity_type == 'USER DELETION' %} user-deletion-label {% endif %}">
+                        {{ log.activity_type }}</p>
+                    <p class="user-name"><strong>Date: </strong> {{ log.timestamp }} |</p>
+                    <p class="user-name"><strong>Description: </strong>{{ log.description }}</p>
+                    <p class="user-name"><strong>Executed By: </strong>
+                        {{ user.first_name }} {{ user.last_name }} - {% if user.account_status == 1 %} Admin {% elif
+                        user.account_status == 2 %} Tutor {% else %} Student {% endif %}</p>
+
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h1>No logs found.</h1>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 
 <style>
@@ -155,7 +194,7 @@
         color: #000000;
     }
 
-    .manage-user-container {
+    .manage-block-container {
         max-width: 100%;
         min-height: 65vh;
         max-height: 65vh;
@@ -163,57 +202,57 @@
         padding: 20px;
         background-color: #E8DFC7;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
+        border-radius: 10px;
         overflow-y: auto;
         /* Add this line to enable vertical scrolling */
     }
 
-    .manage-user-header {
+    .manage-block-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
     }
 
-    .manage-user-search-bar {
+    .manage-block-search-bar {
         width: 60%;
         padding: 10px;
         border: 1px solid #C4B381;
         background-color: #C4B381;
-        border-radius: 5px;
+        border-radius: 10px;
         font-size: 16px;
         margin-bottom: 20px;
     }
 
-    .manage-user-filter-dropdown {
+    .manage-block-filter-dropdown {
         width: 28%;
         padding: 10px;
         border: 1px solid #01161E;
         background-color: #01161E;
         color: #fff;
-        border-radius: 5px;
+        border-radius: 10px;
         font-size: 16px;
     }
 
-    .manage-user-user-box {
+    .manage-block-user-box {
         background-color: #fff;
         padding: 10px;
         margin-bottom: 15px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
+        border-radius: 10px;
         display: flex;
         justify-content: space-between;
 
     }
 
-    .manage-user-user-info {
+    .manage-block-user-info {
         display: flex;
         align-items: space-between;
         max-width: 100%;
         margin-left: 10px;
     }
 
-    .manage-user-user-info p {
+    .manage-block-user-info p {
         padding: 10px;
         font-size: 16px;
 
@@ -223,22 +262,22 @@
     .account-type-lable {
         margin: auto;
         background-color: #EEC148;
-        border-radius: 5px;
+        border-radius: 10px;
         font-weight: bold;
     }
 
-    .manage-user-manage-button-container {
+    .manage-block-manage-button-container {
         margin-left: auto;
         /* Align the button to the right */
     }
 
-    .manage-user-manage-button {
+    .manage-block-manage-button {
         background-color: #5A110C;
         color: #fff;
         border: none;
         padding: 15px;
         /* Adjust padding as needed */
-        border-radius: 5px;
+        border-radius: 10px;
         cursor: pointer;
         font-size: 18px;
         margin-top: 15px;
@@ -264,14 +303,27 @@
         white-space: nowrap;
         /* Prevent text from wrapping */
     }
+
+    .user-creation-label {
+        background-color: #006400;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+
+    .user-deletion-label {
+        background-color: #5A110C;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
 </style>
 
 <script>
     const manageUsersBtn = document.getElementById('manageUsersBtn');
     const manageSessionsBtn = document.getElementById('manageSessionsBtn');
     const tutorApplicationBtn = document.getElementById('tutorApplicationBtn');
-    const content = document.querySelector('.content');
-    const manageUsersContent = document.getElementById('manageUsersContent');
+    const activityLogsBtn = document.getElementById('activityLogsBtn');
+    const content = document.querySelector('.dash-info');
+    const manageUsersContent = document.getElementById('manage-users');
 
     function clearContent() {
         content.innerHTML = ''; // Clear existing content
@@ -285,37 +337,7 @@
 
     // Event listeners for dashboard buttons
     manageUsersBtn.addEventListener('click', () => {
-        clearContent();
-        // Add content for "Manage Users" section here
-        content.innerHTML = `
-        <h1>Manage Users</h1>
-        <div class="manage-user-container" id="manageUsersContent" style="display: block;">
-            <div class="header">
-                <input type="text" class="manage-user-search-bar" placeholder="Search users...">
-                <select class="manage-user-filter-dropdown">
-                    <option value="all">All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-            </div>
-
-            {% for user in users %}
-                <div class="manage-user-user-box">
-                    <div class="manage-user-user-info">
-                        <div class="user-circle-list"></div>
-                        <p class="user-name">{{ user.first_name + " " + user.last_name}}</p>
-                        <p class="account-type-lable">{{ account_type[user.account_status] }}</p>
-                    </div>
-                    <div class="manage-user-manage-button-container">
-                        <button class="manage-user-manage-button" onclick="location.href = '#';">MANAGE</button>
-                    </div>
-                    
-                </div>
-            {% endfor %}
-        `;
-        clearButtonClear();
-        manageUsersBtn.style.backgroundColor = '#AC8616';
-        manageUsersContent.style.display = 'block';
+        location.href = "{{url_for('admin_redirects.manage_users')}}";
     });
 
     manageSessionsBtn.addEventListener('click', () => {
@@ -335,6 +357,10 @@
         tutorApplicationBtn.style.backgroundColor = '#AC8616'; // Change the clicked button color
         manageUsersContent.style.display = 'none'; // Hide the "Manage Users" content
     });
+
+    activityLogsBtn.addEventListener('click', () => {
+        location.href = "{{url_for('admin_redirects.manage_activity_logs')}}";
+    })
 </script>
 
 {% endblock %}
