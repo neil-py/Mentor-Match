@@ -73,7 +73,8 @@ def booking(id):
             course_name=request_form.course_name.data,
             description=request_form.description.data,
             session_type=request_form.session_type.data,
-            communication_channel=request_form.communication_channel.data
+            communication_channel=request_form.communication_channel.data,
+            session_status="requested"
             )
         db.session.add(new_session)
         db.session.commit()

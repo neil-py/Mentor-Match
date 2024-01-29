@@ -149,9 +149,9 @@
             </div>
         </a>
         <a href="{{url_for('home.home')}}">Home</a>
-        <a href="#">Edit Profile</a>
-        <a href="#">Settings</a>
+        <a href="{{url_for('edit_profile.edit_profile')}}">Edit Profile</a>
         {% if current_user.account_status == 3 %}
+        <a href="{{url_for('student_requests.my_requests')}}">My Requests</a>
         <a href="#">Be a Tutor Now!</a>
         {% endif %}
         <a href="{{url_for('authentication.logout')}}" class="logout-link">Logout</a>

@@ -9,4 +9,7 @@ tutor_dashboard_route = Blueprint("tutor_dashboard", __name__, template_folder="
 @tutor_dashboard_route.route("/tutor")
 @login_required
 def dashboard():
-    return render_template("tutor_home.html")
+    return render_template("tutor_home.html", 
+                           show_my_schedule=False, 
+                           show_session_requests=False,
+                           show_contact_admin=False)

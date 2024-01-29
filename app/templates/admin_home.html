@@ -14,7 +14,7 @@
     <!-- Dashboard buttons -->
     <button class="dashboard-button" id="manageUsersBtn"
         style="background-color: {% if show_manage_users %} #AC8616 {% endif %};">MANAGE USERS</button>
-    <button class="dashboard-button" id="manageSessionsBtn">MANAGE SESSIONS</button>
+    <button class="dashboard-button" id="manageSessionsBtn" style="background-color: {% if show_session_requests %} #AC8616 {% endif %};">MANAGE SESSIONS</button>
     <button class="dashboard-button" id="tutorApplicationBtn">TUTOR APPLICATIONS</button>
     <button class="dashboard-button" id="activityLogsBtn"
         style="background-color: {% if show_manage_logs %} #AC8616 {% endif %};">ACTIVITY LOGS</button>
@@ -22,7 +22,7 @@
 
 <div class="content">
     <!-- Content for different dashboard sections goes here -->
-    {% if not show_manage_users and not show_manage_logs %}
+    {% if not show_manage_users and not show_manage_logs and not show_session_requests %}
     <div class="dash-info">
         <div class="welcome-message">
             <h1>Welcome {{current_user.first_name}}</h1>
@@ -80,8 +80,7 @@
                         {{ log.activity_type }}</p>
                     <p class="user-name"><strong>Date: </strong> {{ log.timestamp }} |</p>
                     <p class="user-name"><strong>Description: </strong>{{ log.description }}</p>
-                    <p class="user-name"><strong>Executed By: </strong>
-                        {{ user.first_name }} {{ user.last_name }} - {% if user.account_status == 1 %} Admin {% elif
+                    <p class="user-name"><strong>Executed By: </strong>{% if user.account_status == 1 %} Admin {% elif
                         user.account_status == 2 %} Tutor {% else %} Student {% endif %}</p>
 
                 </div>
@@ -89,6 +88,36 @@
             {% endfor %}
             {% else %}
             <h1>No logs found.</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="manage-block" style="display: {% if show_session_requests %}block{% else %}none{% endif %};">
+        <h1>Sessions</h1>
+        <div class="manage-sessions-block-container"style="display: block;">
+            {% if requests %}
+            {% for request in requests %}
+            <div class="manage-sessions-block-user-box">
+                <div class="manage-sessions-block-user-info" style="background-color: #EEC148; text-align: center;padding: 15px; border-radius: 10px; max-width: 200px; min-width: 200px;">
+                    <h3 class="manage-sessions-name" style="font-size: 20; font-weight: bolder;">{{ request.course_code}}</h3>
+                    <p class="manage-sessions-name" style="font-weight: lighter;">{{ request.course_name}}</p>
+
+                </div>
+                <div class="manage-sessions-block-user-info">
+                    <h3 class="manage-sessions-name" style="font-size: 20; font-weight: bolder;">STUDENT: {{ request.student.first_name + "
+                        " + request.student.last_name}} - <i>{{request.student.program}}</i></h3>
+                        <p class="manage-sessions-name">DATE: {{ request.session_date}} - {{ request.session_time}}</p>
+                    <p class="manage-sessions-name" style="font-weight: lighter;">{{ request.description}}</p>
+                </div>
+                
+                <div class="manage-sessions-block-manage-button-container">
+                    <button class="manage-sessions-block-manage-button" onclick="location.href = '{{url_for('tutor_redirects.manage_session' , id=request.id)}}';">MANAGE</button>
+                </div>
+
+            </div>
+            {% endfor %}
+            {% else %}
+            <h1>No Requests found.</h1>
             {% endif %}
         </div>
     </div>
@@ -314,6 +343,85 @@
         color: #FFFFFF;
         border-radius: 10px;
     }
+
+
+    .manage-sessions-block-container {
+        max-width: 100%;
+
+        max-height: 60vh;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #E8DFC7;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow-y: auto;
+        /* Add this line to enable vertical scrolling */
+    }
+
+    .manage-sessions-block-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .manage-sessions-block-search-bar {
+        width: 60%;
+        padding: 10px;
+        border: 1px solid #C4B381;
+        background-color: #C4B381;
+        border-radius: 10px;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .manage-sessions-block-filter-dropdown {
+        width: 28%;
+        padding: 10px;
+        border: 1px solid #01161E;
+        background-color: #01161E;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    .manage-sessions-block-user-box {
+        background-color: #fff;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+
+    }
+
+    .manage-sessions-block-user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        max-width: 100%;
+        margin-left: 10px;
+    }
+
+
+    .manage-sessions-block-manage-button-container {
+        margin-left: auto;
+        padding: 10px;
+        /* Align the button to the right */
+    }
+
+    .manage-sessions-block-manage-button {
+        background-color: #5A110C;
+        color: #fff;
+        border: none;
+        padding: 15px;
+        /* Adjust padding as needed */
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 15px;
+    }
 </style>
 
 <script>
@@ -340,12 +448,7 @@
     });
 
     manageSessionsBtn.addEventListener('click', () => {
-        clearContent();
-        // Add content for "Manage Sessions" section here
-        content.innerHTML = '<h1>Manage Sessions</h1>';
-        clearButtonClear();
-        manageSessionsBtn.style.backgroundColor = '#AC8616'; // Change the clicked button color
-        manageUsersContent.style.display = 'none'; // Hide the "Manage Users" content
+        location.href = "{{url_for('admin_redirects.admin_manage_sessions')}}"
     });
 
     tutorApplicationBtn.addEventListener('click', () => {

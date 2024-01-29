@@ -1,5 +1,403 @@
-
 {% extends 'base.html' %}
 {% block main %}
+<div class="dashboard-container">
+    <!-- Admin Info -->
+    <div class="admin-info">
+        <p>{{account_type[current_user.account_status]}}</p>
+        <div class="user-circle"></div>
+        <div class="user-info">
+            <h3>{{current_user.first_name + " " + current_user.last_name}}</h3>
+            <p>{{current_user.program}}</p>
+        </div>
+    </div>
+
+    <!-- Dashboard buttons -->
+    <button class="dashboard-button" id="myScheduleBtn"
+        style="background-color: {% if show_my_schedule %} #AC8616 {% endif %};">MY SCHEDULE</button>
+    <button class="dashboard-button" id="sessionRequestsBtn"
+        style="background-color: {% if show_session_requests %} #AC8616 {% endif %};">SESSION REQUESTS</button>
+    <button class="dashboard-button" id="contactAdminBtn"
+        style="background-color: {% if show_contact_admin %} #AC8616 {% endif %};">CONTACT ADMIN</button>
+</div>
+
+<div class="content">
+    <!-- Content for different dashboard sections goes here -->
+    {% if not show_my_schedule and not show_session_requests and not show_contact_admin %}
+    <div class="dash-info">
+        <div class="welcome-message">
+            <h1>Welcome {{current_user.first_name}}</h1>
+            <p>This is your Tutor dashboard. You view your schedule for the week and sessions requests.</p>
+        </div>
+    </div>
+    {% endif %}
+    <!-- MANAGE USERS HIDDEN DEFAULT-->
+
+    {% if show_my_schedule %}
+    <div id="my-schedule" style="display: {% if show_my_schedule %} block {% else %} none {% endif %};">
+        <h1>My Schedule</h1>
+        <h2>{{week_range[0].strftime('%m/%d/%y')}} - {{week_range[1].strftime('%m/%d/%y')}}</h2>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for time_slot in time_slots %}
+                <tr>
+                    <td>{{ time_slot }}</td>
+                    {% for day in days %}
+                    {% set available = {'value': True}%}
+                    {% if tutor_sessions %}
+                    {% for session in tutor_sessions %}
+                    {% if session.session_time == time_slot and session.session_date | string == days_date[day] %}
+                    <td data-day="{{ day }}" data-time="{{ time_slot }}"
+                    style=" {% if session.session_status == 'confirmed' %}background-color: #006400 {% else %} background-color: #EEC148 {% endif %}; color: #FFFFFF;"
+                    onclick="location.href='{{url_for('tutor_redirects.manage_session', id=session.id)}}'"
+                    >
+                        {{ session.session_status | capitalize}}
+                    </td>
+                    {% if available.update({'value':False})%}{% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% if available.value %}
+                    <td data-day="{{ day }}" data-time="{{ time_slot }}"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+
+    <!-- Manage session requests-->
+    <div id="manage-block" style="display: {% if show_session_requests %}block{% else %}none{% endif %};">
+        <h1>Session Requests</h1>
+        <div class="manage-block-container" id="manageUsersContent" style="display: block;">
+            {% if requests %}
+            {% for request in requests %}
+            <div class="manage-block-user-box">
+                <div class="manage-block-user-info" style="background-color: #EEC148; text-align: center;padding: 15px; border-radius: 10px; max-width: 200px; min-width: 200px;">
+                    <h3 class="user-name" style="font-size: 20; font-weight: bolder;">{{ request.course_code}}</h3>
+                    <p class="user-name" style="font-weight: lighter;">{{ request.course_name}}</p>
+
+                </div>
+                <div class="manage-block-user-info">
+                    <h3 class="user-name" style="font-size: 20; font-weight: bolder;">{{ request.student.first_name + "
+                        " + request.student.last_name}} - <i>{{request.student.program}}</i></h3>
+                        <p class="user-name">DATE: {{ request.session_date}} - {{ request.session_time}}</p>
+                    <p class="user-name" style="font-weight: lighter;">{{ request.description}}</p>
+                </div>
+                <div class="manage-block-manage-button-container">
+                    <button class="manage-block-manage-button" onclick="location.href = '{{url_for('tutor_redirects.manage_session' , id=request.id)}}';">MANAGE</button>
+                </div>
+
+            </div>
+            {% endfor %}
+            {% else %}
+            <h1>No Requests found.</h1>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<style>
+    /* Admin Dashboard Styles */
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: #FFF6DD;
+    }
+
+    .dashboard-container {
+        background-color: #371513;
+        height: 100%;
+        /* Set a fixed vertical height, e.g., 100% of the viewport height */
+        position: fixed;
+        width: 20%;
+        /* Roughly 1/4 of the screen */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        /* Center content vertically */
+        padding: 20px;
+        top: 1;
+    }
+
+    .admin-info {
+        color: #FFE085;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-top: -50%;
+    }
+
+    .user-circle {
+        width: 120px;
+        height: 120px;
+        background-color: #ccc;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        /* Center the circle horizontally and vertically */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 10%;
+    }
+
+
+    .user-info {
+        text-align: center;
+    }
+
+    .user-info h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .dashboard-button {
+        font-size: 20px;
+        background-color: #FFF2CA;
+        color: #000000;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 0;
+        cursor: pointer;
+        text-align: center;
+        min-width: 80%;
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Content styles */
+    .content {
+        margin-left: 23%;
+        /* Adjust this margin based on the dashboard width */
+        padding: 10px;
+    }
+
+    .welcome-message {
+        text-align: center;
+        background-color: #FFF2CA;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-message h1 {
+        font-size: 32px;
+        color: #000000;
+    }
+
+    .welcome-message p {
+        font-size: 18px;
+        color: #000000;
+    }
+
+    .manage-block-container {
+        max-width: 100%;
+
+        max-height: 60vh;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #E8DFC7;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow-y: auto;
+        /* Add this line to enable vertical scrolling */
+    }
+
+    .manage-block-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .manage-block-search-bar {
+        width: 60%;
+        padding: 10px;
+        border: 1px solid #C4B381;
+        background-color: #C4B381;
+        border-radius: 10px;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .manage-block-filter-dropdown {
+        width: 28%;
+        padding: 10px;
+        border: 1px solid #01161E;
+        background-color: #01161E;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    .manage-block-user-box {
+        background-color: #fff;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+
+    }
+
+    .manage-block-user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        max-width: 100%;
+        margin-left: 10px;
+    }
+
+
+    .account-type-lable {
+        margin: auto;
+        background-color: #EEC148;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+    .manage-block-manage-button-container {
+        margin-left: auto;
+        padding: 10px;
+        /* Align the button to the right */
+    }
+
+    .manage-block-manage-button {
+        background-color: #5A110C;
+        color: #fff;
+        border: none;
+        padding: 15px;
+        /* Adjust padding as needed */
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 15px;
+    }
+
+    .user-circle-list {
+        width: 60px;
+        height: 60px;
+        background-color: #ccc;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        /* Center the circle horizontally and vertically */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .user-name {
+        margin: 5px 0;
+        font-weight: bold;
+        /* Prevent text from wrapping */
+    }
+
+    .user-creation-label {
+        background-color: #006400;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+
+    .user-deletion-label {
+        background-color: #5A110C;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+
+    .schedule-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        border-radius: 10px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 20px;
+        text-align: center;
+        border: 1px solid #ccc;
+    }
+
+    .schedule-table th {
+        background-color: #5A110C;
+        color: #fff;
+    }
+
+    .schedule-table td {
+        background-color: #fff;
+    }
+
+    .schedule-table td[data-day][data-time] {
+        cursor: pointer;
+        background-color: #e1e1e1;
+    }
+
+
+
+    .schedule-table td[data-day][data-time] button {
+        border: none;
+        background-color: #3498db;
+        color: #fff;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .schedule-table td[data-day][data-time] button.requested {
+        background-color: #e74c3c;
+        /* Red color for requested slots */
+    }
+</style>
+
+<script>
+    const myScheduleBtn = document.getElementById('myScheduleBtn');
+    const sessionRequestsBtn = document.getElementById('sessionRequestsBtn');
+    const contactAdmin = document.getElementById('contactAdmin');
+
+    function clearContent() {
+        content.innerHTML = ''; // Clear existing content
+    }
+
+    function clearButtonClear() {
+        myScheduleBtn.style.backgroundColor = '#FFF2CA';
+        sessionRequestsbtn.style.backgroundColor = '#FFF2CA';
+        contactAdmin.style.backgroundColor = '#FFF2CA';
+    }
+
+    // Event listeners for dashboard buttons
+    myScheduleBtn.addEventListener('click', () => {
+        location.href = "{{url_for('tutor_redirects.my_schedule')}}";
+    });
+
+    sessionRequestsBtn.addEventListener('click', () => {
+        location.href = "{{url_for('tutor_redirects.session_requests')}}";
+    });
+
+    contactAdmin.addEventListener('click', () => {
+
+    });
+
+</script>
 
 {% endblock %}

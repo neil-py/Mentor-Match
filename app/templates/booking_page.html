@@ -35,19 +35,20 @@
             <tr>
                 <td>{{ time_slot }}</td>
                 {% for day in days %}
-                    {% set available = {'value': True}%}
-                    {% if tutor_sessions %}
-                        {% for session in tutor_sessions %}
-                            {% if session.session_time == time_slot and session.session_date | string == days_date[day] %}
-                                <td data-day="{{ day }}" data-time="{{ time_slot }}" style="background-color: #E3A90C;">NOT AVAILABLE</td>
-                                {% if available.update({'value':False})%}{% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if available.value %}
-                            <td data-day="{{ day }}" data-time="{{ time_slot }}"
-                            onclick='RequestForm("{{ time_slot }}", "{{ days_date[day] }}")'>REQUEST</td>
-                        {% endif %}
+                {% set available = {'value': True}%}
+                {% if tutor_sessions %}
+                {% for session in tutor_sessions %}
+                {% if session.session_time == time_slot and session.session_date | string == days_date[day] %}
+                <td data-day="{{ day }}" data-time="{{ time_slot }}" style="background-color: #E3A90C;">NOT AVAILABLE
+                </td>
+                {% if available.update({'value':False})%}{% endif %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% if available.value %}
+                <td data-day="{{ day }}" data-time="{{ time_slot }}"
+                    onclick='RequestForm("{{ time_slot }}", "{{ days_date[day] }}")'>REQUEST</td>
+                {% endif %}
                 {% endfor %}
             </tr>
             {% endfor %}
@@ -60,39 +61,43 @@
     <!-- Modal content -->
     <div class="form-content">
         <span class="close">&times;</span>
+        <br />
         <form method="POST" action="{{url_for('booking.booking', id=tutor_info['id'])}}">
             {{ form.hidden_tag() }}
 
-            <div class="form-group">
-                {{ form.time_slot.label }} {{ form.time_slot(id="time_slot_form", readonly=True) }}
+            <div class="input-group">
+                {{ form.time_slot.label(class="input-label") }} {{ form.time_slot(id="time_slot_form", readonly=True,
+                class="form-control") }}
             </div>
 
-            <div class="form-group">
-                {{ form.session_date.label }} {{ form.session_date(id="session_date_form", readonly=True) }}
+            <div class="input-group">
+                {{ form.session_date.label(class="input-label") }} {{ form.session_date(id="session_date_form",
+                readonly=True, class="form-control") }}
             </div>
 
-            <div class="form-group">
-                {{ form.course_code.label }} {{ form.course_code }}
+            <div class="input-group">
+                {{ form.course_code.label(class="input-label") }} {{ form.course_code(class="form-control") }}
             </div>
 
-            <div class="form-group">
-                {{ form.course_name.label }} {{ form.course_name }}
+            <div class="input-group">
+                {{ form.course_name.label(class="input-label") }} {{ form.course_name(class="form-control") }}
             </div>
 
-            <div class="form-group">
-                {{ form.description.label }} {{ form.description }}
+            <div class="input-group">
+                {{ form.description.label(class="input-label") }} {{ form.description(class="form-control") }}
             </div>
 
-            <div class="form-group">
-                {{ form.session_type.label }} {{ form.session_type }}
+            <div class="input-group">
+                {{ form.session_type.label(class="input-label")}} {{ form.session_type(class="form-control", style="background-color: #C4B381;") }}
             </div>
 
-            <div class="form-group">
-                {{ form.communication_channel.label }} {{ form.communication_channel }}
+            <div class="input-group">
+                {{ form.communication_channel.label(class="input-label") }} {{
+                form.communication_channel(class="form-control") }}
             </div>
 
-            <div class="form-group">
-                {{ form.request(type="submit") }}
+            <div class="btn-group">
+                {{ form.request(type="submit", class="btn-success") }}
             </div>
         </form>
     </div>
@@ -212,7 +217,7 @@
     .form {
         display: none;
         /* Hidden by default */
-        position: fixed;
+        position: absolute;
         /* Stay in place */
         z-index: 1;
         /* Sit on top */
@@ -233,13 +238,14 @@
 
     /* Modal Content/Box */
     .form-content {
-        background-color: #FFF6DD;
-        margin: 15% auto;
-        /* 15% from the top and centered */
+        background-color: #E8DFC7;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         padding: 20px;
         border: 1px solid #888;
         width: 80%;
-        /* Could be more or less, depending on screen size */
     }
 
     /* The Close Button */
@@ -255,6 +261,59 @@
         color: black;
         text-decoration: none;
         cursor: pointer;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 1px;
+        background-color: #F5F5F5;
+        border-radius: 10px;
+
+    }
+
+    /* Style the label within the input group */
+    .input-label {
+        flex: 0 0 150px;
+        /* Adjust the width as needed */
+        font-weight: bold;
+        margin-right: 10px;
+        color: #A5A5A5;
+        padding: 20px;
+    }
+
+    .form-control {
+        flex: 1;
+        min-width: 100px;
+        padding: 20px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        text-align: left;
+        background-color: #F5F5F5;
+    }
+
+    /* Style the placeholder text */
+    .form-control::placeholder {
+        color: #A5A5A5;
+        font-weight: normal;
+        /* Remove bold styling for placeholder */
+    }
+
+    .btn-group {
+        margin-top: 20px;
+    }
+
+    .btn-success {
+        background-color: #5A110C;
+        color: #fff;
+        border: none;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        min-width: 200px
     }
 </style>
 

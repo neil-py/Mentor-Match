@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block main %}
+<div id="manage-block">
+    <h1>My Requests</h1>
+    <div class="manage-block-container">
+        {% if requests %}
+        {% for request in requests %}
+        <div class="manage-block-user-box">
+            <div class="manage-block-status">
+                <h3>{{ request.session_status | capitalize }}</h3>
+                {% if request.session_status == 'accepted' %}
+                <p>Please wait for the tutor to contact you.</p>
+                {% elif request.session_status == 'requested' %}
+                <p>Please wait for the tutor to confirm your request.</p>
+                {% endif %}
+            </div>
+            <div class="manage-block-user-info">
+                <h3 class="user-name"><strong>TUTOR:</strong> {{ request.tutor.first_name }} {{ request.tutor.last_name}} - <i>{{
+                        request.tutor.program }}</i></h3>
+                <p class="user-name">DATE: {{ request.session_date }} - {{ request.session_time }}</p>
+                <p class="user-name">{{ request.course_code }} - {{ request.course_name }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <h1>No Requests found.</h1>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    body,
+    html {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: #FFF6DD;
+    }
+
+    #manage-block {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .manage-block-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #E8DFC7;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow-y: auto;
+    }
+
+    .manage-block-user-box {
+        background-color: #fff;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .manage-block-status {
+        background-color: #EEC148;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        width: 150px; /* Adjust width as needed */
+    }
+
+    .manage-block-user-info {
+        flex: 1;
+        margin-left: 10px;
+    }
+
+    .user-name {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock %}

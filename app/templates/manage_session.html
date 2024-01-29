@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block main %}
+
+
+<div class="main-container">
+    <h1 style="text-align: text-center !important;">Session Information</h1>
+    <p style="color: #006400;"><strong>Session Status:</strong> {{ session.session_status |capitalize }}</p>
+    <div class="information-container">
+
+        <div class="user-info">
+            <h2>Student Information</h2>
+            <p><strong>Name:</strong> {{ student.first_name }} {{ student.last_name }}</p>
+            <p><strong>University Number:</strong> {{ student.university_number }}</p>
+            <p><strong>Program:</strong> {{ student.program }}</p>
+        </div>
+        {% if current_user.account_status == 1 %}
+        <div class="user-info">
+            <h2>Tutor Information</h2>
+            <p><strong>Name:</strong> {{ tutor.first_name }} {{ tutor.last_name }}</p>
+            <p><strong>University Number:</strong> {{ tutor.university_number }}</p>
+            <p><strong>University Email:</strong> {{ tutor.university_email }}</p>
+            <p><strong>Program:</strong> {{ tutor.program }}</p>
+        </div>
+        {% endif %}
+        {% if session %}
+        <div class="session-info">
+            <p><strong>Session Date:</strong> {{ session.session_date }}</p>
+            <p><strong>Session Time:</strong> {{ session.session_time }}</p>
+            <p><strong>Course Code:</strong> {{ session.course_code }}</p>
+            <p><strong>Course Name:</strong> {{ session.course_name }}</p>
+            <p><strong>Description:</strong> {{ session.description }}</p>
+            <p><strong>Session Type:</strong> {{ session.session_type }}</p>
+            <p><strong>Communication Channel:</strong> {{ session.communication_channel }}</p>
+        </div>
+
+        {% if session.session_status != 'accepted' %}
+        <div class="btn-group">
+            <button class="btn-success" id="cancel-btn" style="font-weight: bold;" onclick="location.href='{{url_for('tutor_redirects.accept_session', id=session.id)}}'">ACCEPT</button>
+            <button class="btn-cancel" id="cancel-btn" style="font-weight: bold;">DENY</button>
+
+        </div>
+        {% endif %}
+    </div>
+
+    {% else %}
+    <h2>No Session Found.</h2>
+    {% endif %}
+</div>
+
+<style>
+    body {
+        background-color: #FFF6DD;
+    }
+
+    .alert-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .alert {
+        width: 80%;
+        max-width: 500px;
+        /* Adjust as needed */
+        margin: 10px 0;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .alert.success {
+        background-color: #54F47D;
+        /* Green color for success */
+        color: white;
+    }
+
+    .btn-success {
+        background-color: #006400;
+        color: #fff;
+        border: none;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        min-width: 200px
+    }
+
+    .btn-cancel {
+        background-color: #371513;
+        color: #fff;
+        border: none;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        min-width: 200px
+    }
+
+    .btn-group {
+        margin-top: 20px;
+    }
+
+    .main-container {
+
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .information-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    .session-info,
+    .user-info {
+        background-color: #F5F5F5;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .session-info h2,
+    .user-info h2 {
+        margin-top: 0;
+    }
+
+    .user-info {
+        background-color: #F5F5F5;
+    }
+
+    .user-info p {
+        margin: 5px 0;
+    }
+
+    .user-info p strong {
+        margin-right: 5px;
+    }
+
+    .session-info p {
+        margin: 5px 0;
+    }
+
+    .session-info p strong {
+        margin-right: 5px;
+    }
+
+    /* Align session information and user information to the left */
+    .session-info,
+    .user-info {
+        display: inline-block;
+        width: calc(50% - 20px);
+        /* Adjust width as needed */
+        vertical-align: top;
+    }
+
+    /* Ensure user information doesn't extend the full width */
+    .user-info {
+        max-width: 400px;
+        /* Adjust as needed */
+    }
+</style>
+{% endblock %}
