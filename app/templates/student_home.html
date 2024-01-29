@@ -1,3 +1,129 @@
 {% extends 'base.html' %}
 {% block main %}
+
+<div class="filter-section">
+    <label for="filter-dropdown">Filter by:</label>
+    <select id="filter-dropdown">
+        <option value="all">All</option>
+        <option value="math">Math</option>
+        <option value="science">Science</option>
+        <option value="english">English</option>
+    </select>
+    <div class="tags">
+        <span class="tag" data-filter="math">Math</span>
+        <span class="tag" data-filter="science">Science</span>
+        <span class="tag" data-filter="english">English</span>
+    </div>
+</div>
+<div class="tutor-cards" id="tutor-cards">
+    {% if tutors %}
+    {% for tutor in tutors %}
+    <div class="card">
+        <div class="image-placeholder"></div>
+        <h2>{{tutor.first_name}} {{tutor.last_name}}</h2>
+        <p style="color: #FFE085;">{{tutor.program}}</p>
+        <p style="color: #FFF;">specializes in</p>
+        {% if tutor.tags %}
+        {% for tag in tutor.tags.split(",") %}
+        <p>{{tag}}</p>
+        {% endfor %}
+        {% else %}
+        <p>Not Available</p>
+        {% endif %}
+        <button class="request-button" onclick=location.href="{{url_for('booking.booking', id=tutor.id)}}">REQUEST</button>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #FFF6DD;
+        font-family: Montserrat;
+    }
+
+    .filter-section {
+        text-align: center;
+        margin: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    select {
+        padding: 5px;
+    }
+
+    .tags {
+        margin-top: 10px;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 5px;
+        background-color: #3498db;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .tutor-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px;
+    }
+
+    .card {
+        padding: 25px;
+        margin: 10px;
+        width: 300px;
+        min-height: 200px;
+        text-align: center;
+        background-color: #5A110C;
+        border-radius: 10px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .card .image-placeholder {
+        width: 35%;
+        height: 100px;
+        /* Adjust the height as needed */
+        background-color: #ddd;
+        /* Gray color for placeholder */
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card h2 {
+        margin: 5px 0;
+        color: #fff;
+    }
+
+    .card p {
+        margin: 5px 0;
+    }
+
+    .request-button {
+        background-color: #E3A90C;
+        color: #fff;
+        padding: 15px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+</style>
 {% endblock %}

@@ -14,7 +14,7 @@ class Users(UserMixin, db.Model):
     password = db.Column(db.String(200), nullable=False)
     account_status = db.Column(db.Integer)
     tags = db.Column(db.String(200), nullable=True)
-    profile_pic = db.Column(db.String(200), nullable=True)
+    #profile_pic = db.Column(db.String(200), nullable=True)
 
     @classmethod
     def is_login_name_taken(cls, login_name):

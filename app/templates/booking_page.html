@@ -1,61 +1,307 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutor Booking Page</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='booking.css') }}">
-</head>
-
-<body>
-
-    <div class="container">
-        <header>
-            <nav>
-                <!-- Navigation and Logo -->
-            </nav>
-            <h1>MENTOR MATCH</h1>
-        </header>
-
-        <section class="tutor-profile">
-            <h2>{{ tutor_info["first_name"] + " " + tutor_info["last_name"]}}</h2>
-            <p>{{ tutor_info["program"] }}</p>
+{% extends 'base.html' %}
+{% block main %}
+<div class="dashboard-container">
+    <div class="admin-info">
+        <div class="image-placeholder"></div>
+        <div class="user-info">
+            <h3>{{ tutor_info["first_name"] + " " + tutor_info["last_name"]}}</h3>
+            <p style="color: #5A110C;">{{ tutor_info["program"] }}</p>
+            <p>specializes in</p>
             <div class="specializations">
                 <span class="tag">PROGRAMMING</span>
                 <span class="tag">INFORMATION TECH</span>
             </div>
-            <button class="tag c-plus-plus">C++</button>
-        </section>
-
-        <!-- Add this code inside the .schedule section -->
-        <section class="schedule">
-            <h2>PICK A DATE AND TIME</h2>
-            <div class="calendar">
-                <div class="weekdays">
-                    <div class="weekday">MONDAY<br>JANUARY 15, 2024</div>
-                    <div class="weekday">TUESDAY<br>JANUARY 16, 2024</div>
-                    <div class="weekday">WEDNESDAY<br>JANUARY 17, 2024</div>
-                    <div class="weekday">THURSDAY<br>JANUARY 18, 2024</div>
-                    <div class="weekday">FRIDAY<br>JANUARY 19, 2024</div>
-                </div>
-                <div class="time-slots">
-                    <div class="time-slot">8:00 AM</div>
-                    <div class="time-slot taken">TAKEN</div>
-                    <div class="time-slot taken">TAKEN</div>
-                    <!-- Repeat for other time slots -->
-                </div>
-                <!-- Repeat time-slots div for each row -->
-            </div>
-            <button class="send-request">SEND REQUEST</button>
-        </section>
-
-
-        <footer>
-            <!-- Footer content -->
-        </footer>
+        </div>
     </div>
 
-</body>
+</div>
 
-</html>
+<div class="content">
+    <h2>Tutoring Schedule</h2>
+    <h1>{{week_range[0].strftime('%m/%d/%y')}} - {{week_range[1].strftime('%m/%d/%y')}}</h1>
+    <table class="schedule-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for time_slot in time_slots %}
+            <tr>
+                <td>{{ time_slot }}</td>
+                {% for day in days %}
+                    {% set available = {'value': True}%}
+                    {% if tutor_sessions %}
+                        {% for session in tutor_sessions %}
+                            {% if session.session_time == time_slot and session.session_date | string == days_date[day] %}
+                                <td data-day="{{ day }}" data-time="{{ time_slot }}" style="background-color: #E3A90C;">NOT AVAILABLE</td>
+                                {% if available.update({'value':False})%}{% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if available.value %}
+                            <td data-day="{{ day }}" data-time="{{ time_slot }}"
+                            onclick='RequestForm("{{ time_slot }}", "{{ days_date[day] }}")'>REQUEST</td>
+                        {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="myModal" class="form">
+
+    <!-- Modal content -->
+    <div class="form-content">
+        <span class="close">&times;</span>
+        <form method="POST" action="{{url_for('booking.booking', id=tutor_info['id'])}}">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.time_slot.label }} {{ form.time_slot(id="time_slot_form", readonly=True) }}
+            </div>
+
+            <div class="form-group">
+                {{ form.session_date.label }} {{ form.session_date(id="session_date_form", readonly=True) }}
+            </div>
+
+            <div class="form-group">
+                {{ form.course_code.label }} {{ form.course_code }}
+            </div>
+
+            <div class="form-group">
+                {{ form.course_name.label }} {{ form.course_name }}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label }} {{ form.description }}
+            </div>
+
+            <div class="form-group">
+                {{ form.session_type.label }} {{ form.session_type }}
+            </div>
+
+            <div class="form-group">
+                {{ form.communication_channel.label }} {{ form.communication_channel }}
+            </div>
+
+            <div class="form-group">
+                {{ form.request(type="submit") }}
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<style>
+    body {
+        background-color: #FFF6DD;
+    }
+
+    .dashboard-container {
+        height: 100%;
+        /* Set a fixed vertical height, e.g., 100% of the viewport height */
+        position: fixed;
+        width: 20%;
+        /* Roughly 1/4 of the screen */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        /* Center content vertically */
+        padding: 15px;
+        top: 1;
+    }
+
+    .image-placeholder {
+        width: 35%;
+        height: 100px;
+        /* Adjust the height as needed */
+        background-color: #ddd;
+        /* Gray color for placeholder */
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .admin-info {
+        color: #000000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-top: -50%;
+    }
+
+    .user-info {
+        text-align: center;
+    }
+
+    .user-info h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .content {
+        margin-left: 23%;
+        /* Adjust this margin based on the dashboard width */
+        padding: 10px;
+    }
+
+
+    h1 {
+        text-align: center;
+    }
+
+    .schedule-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        border-radius: 10px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 20px;
+        text-align: center;
+        border: 1px solid #ccc;
+    }
+
+    .schedule-table th {
+        background-color: #5A110C;
+        color: #fff;
+    }
+
+    .schedule-table td {
+        background-color: #fff;
+    }
+
+    .schedule-table td[data-day][data-time] {
+        cursor: pointer;
+        background-color: #e1e1e1;
+    }
+
+    .schedule-table td[data-day][data-time]:hover {
+        background-color: #d0d0d0;
+    }
+
+    .schedule-table td[data-day][data-time] button {
+        border: none;
+        background-color: #3498db;
+        color: #fff;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .schedule-table td[data-day][data-time] button.requested {
+        background-color: #e74c3c;
+        /* Red color for requested slots */
+    }
+
+
+    .form {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+        border-radius: 10px;
+    }
+
+    /* Modal Content/Box */
+    .form-content {
+        background-color: #FFF6DD;
+        margin: 15% auto;
+        /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        /* Could be more or less, depending on screen size */
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    function resetForm() {
+        // Reset the form fields to their default values
+        document.getElementById("time_slot_form").value = "";
+        document.getElementById("session_date_form").value = "";
+        document.getElementById("course_code").value = "";
+        document.getElementById("course_name").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("session_type").value = "";
+        document.getElementById("communication_channel").value = "";
+    }
+
+    function extractDateFromDateStr(datetimeStr) {
+        const datePart = datetimeStr.split(' ')[0];
+        return datePart;
+    }
+
+    function RequestForm(time_slot, date) {
+        modal.style.display = "block";
+        document.getElementById('time_slot_form').value = time_slot;
+        document.getElementById('session_date_form').value = extractDateFromDateStr(date);
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+        resetForm();
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            resetForm();
+        }
+    }
+    window.onbeforeunload = function () {
+        resetForm(); // Call the function to reset the form fields
+    }
+</script>
+{% endblock %}

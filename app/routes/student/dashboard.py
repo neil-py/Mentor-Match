@@ -8,4 +8,5 @@ student_dashboard_route = Blueprint("student_dashboard", __name__, template_fold
 @student_dashboard_route.route("/student")
 @login_required
 def dashboard():
-    return render_template("student_home.html")
+    tutors = users.Users.query.filter(users.Users.account_status == 2).all()
+    return render_template("student_home.html", tutors=tutors)

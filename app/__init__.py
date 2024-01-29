@@ -2,6 +2,7 @@ from flask import Flask
 from app.extensions import db, migrate, login_manager, account_type
 from app.models.users import Users
 from app.models.activity_logs import ActivityLog
+from app.models.sessions import Sessions
 from app.routes import home
 from app.routes.student import booking
 from app.routes.student import booking
