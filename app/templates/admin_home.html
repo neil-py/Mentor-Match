@@ -97,6 +97,7 @@
         <div class="manage-sessions-block-container"style="display: block;">
             {% if requests %}
             {% for request in requests %}
+            {% if request.session_status != 'requested' %}
             <div class="manage-sessions-block-user-box">
                 <div class="manage-sessions-block-user-info" style="background-color: #EEC148; text-align: center;padding: 15px; border-radius: 10px; max-width: 200px; min-width: 200px;">
                     <h3 class="manage-sessions-name" style="font-size: 20; font-weight: bolder;">{{ request.course_code}}</h3>
@@ -115,6 +116,7 @@
                 </div>
 
             </div>
+            {% endif %}
             {% endfor %}
             {% else %}
             <h1>No Requests found.</h1>
@@ -347,7 +349,7 @@
 
     .manage-sessions-block-container {
         max-width: 100%;
-
+        min-height: 60vh;
         max-height: 60vh;
         margin: 0 auto;
         padding: 20px;
