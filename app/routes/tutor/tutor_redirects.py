@@ -91,7 +91,7 @@ def session_requests():
                            )
 
 
-@tutor_redirects_route.route('/tutor/manage/session/<id>')
+@tutor_redirects_route.route('/session/<id>')
 @login_required
 def manage_session(id):
     session = sessions.Sessions.query.get(id)

@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% block main %}
+
+
+<div class="main-container">
+    <h1>TUTOR APPLICATION</h1>
+    <div class="circle-edit-profile"></div>
+    <h2> {{ application_information[0].student.first_name}} {{ application_information[0].student.last_name}}</h2>
+    <div class="form-container">
+
+        <!-- Two columns for form fields -->
+
+        <div class="columns">
+            <div class="column">
+                <div class="input-group">
+                    <div class="input-label">
+                        UNIVERSITY NUMBER:
+                    </div>
+                    <div class="form-control">
+                        {{ application_information[0].student.university_number}}
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        UNIVERSITY EMAIL:
+                    </div>
+                    <div class="form-control">
+                        {{ application_information[0].student.university_email}}
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        PROGRAM:
+                    </div>
+                    <div class="form-control">
+                        {{ application_information[0].student.program}}
+                    </div>
+                </div>
+            </div>
+
+            <!--column 2-->
+            <div class="column">
+                <div class="input-group">
+                    <div class="form-control">
+                        {{ application_information[0].description}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-group">
+        <button class="btn-success" id="cancel-btn" style="font-weight: bold;">ACCEPT</button>
+        <button class="btn-cancel" id="cancel-btn" style="font-weight: bold;">CANCEL</button>
+
+    </div>
+</div>
+
+
+<style>
+    body {
+        background-color: #FFF6DD;
+    }
+
+    .alert-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .alert {
+        width: 80%;
+        max-width: 500px;
+        /* Adjust as needed */
+        margin: 10px 0;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .alert.success {
+        background-color: #54F47D;
+        /* Green color for success */
+        color: white;
+    }
+
+    .closebtn {
+        cursor: pointer;
+        float: right;
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    .main-container {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .form-container {
+        max-width: 1200px;
+        padding: 50px;
+        font-family: Montserrat;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #E8DFC7;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .circle-edit-profile {
+        width: 100px;
+        height: 100px;
+        background-color: #ccc;
+        border-radius: 50%;
+        margin: 0 auto;
+        /* Center horizontally */
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+
+    form {
+        margin: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .btn-success {
+        background-color: #006400;
+        color: #fff;
+        border: none;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        min-width: 200px
+    }
+
+    .btn-cancel {
+        background-color: #371513;
+        color: #fff;
+        border: none;
+        padding: 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        min-width: 200px
+    }
+
+    .btn-group {
+        margin-top: 20px;
+    }
+
+    .alert {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 4px;
+    }
+
+    .alert-danger {
+        border: 1px solid #f5c6cb;
+    }
+
+    /* Style the input group to display the label and input field together */
+    .input-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 1px;
+        background-color: #F5F5F5;
+        border-radius: 10px;
+
+    }
+
+    /* Style the label within the input group */
+    .input-label {
+        flex: 0 0 200px;
+        /* Adjust the width as needed */
+        font-weight: bold;
+        margin-right: 10px;
+        color: #A5A5A5;
+    }
+
+    /* Style the input field within the input group */
+    .form-control {
+        flex: 1;
+        min-width: 150px;
+        padding: 20px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        text-align: left;
+        background-color: #F5F5F5;
+    }
+
+    /* Style the placeholder text */
+    .form-control::placeholder {
+        color: #A5A5A5;
+        font-weight: normal;
+        /* Remove bold styling for placeholder */
+    }
+
+    .columns {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .column {
+        flex: 0 0 calc(50% - 10px);
+    }
+</style>
+
+
+
+{% endblock %}

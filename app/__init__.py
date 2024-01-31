@@ -3,6 +3,7 @@ from app.extensions import db, migrate, login_manager, account_type
 from app.models.users import Users
 from app.models.activity_logs import ActivityLog
 from app.models.sessions import Sessions
+from app.models.tutor_applications import TutorApplications
 from app.routes import home
 from app.routes.student import booking
 from app.routes.student import booking
@@ -21,6 +22,7 @@ def create_app():
     from app.routes.student import booking as student_booking
     from app.routes.student import dashboard as student_dashboard
     from app.routes.student import requests as student_requests
+    from app.routes.student import student_tutor_application
     #admin modules
     from app.routes.admin import dashboard as admin_dashboard
     from app.routes.admin import create_user as admin_create_user
@@ -44,6 +46,7 @@ def create_app():
     app.register_blueprint(tutor_redirects.tutor_redirects_route)
     app.register_blueprint(student_requests.student_requests_route)
     app.register_blueprint(edit_profile.edit_profile_route)
+    app.register_blueprint(student_tutor_application.student_tutor_application_route)
 
 
     db.init_app(app)

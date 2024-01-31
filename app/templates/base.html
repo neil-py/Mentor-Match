@@ -152,7 +152,7 @@
         <a href="{{url_for('edit_profile.edit_profile')}}">Edit Profile</a>
         {% if current_user.account_status == 3 %}
         <a href="{{url_for('student_requests.my_requests')}}">My Requests</a>
-        <a href="#">Be a Tutor Now!</a>
+        <a href="{{url_for('student_tutor_application.tutor_application')}}">Be a Tutor Now!</a>
         {% endif %}
         <a href="{{url_for('authentication.logout')}}" class="logout-link">Logout</a>
     </div>

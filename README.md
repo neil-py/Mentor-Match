@@ -1,7 +1,12 @@
 
+# Project Title
+
+A brief description of what this project does and who it's for
+
+
 # Mentor Match
 
-Prototype Verision 0.1 (developement on progress)
+Prototype Version
 
 ## Installation
 
@@ -18,14 +23,10 @@ Run the application
 python run.py
 ```
 
-## Currently Working routes
-Run the app locally try these routes
-- http://127.0.0.1:5000
-- http://127.0.0.1:5000/login
-- http://127.0.0.1:5000/registration
-- http://127.0.0.1:5000/logout
+## Functionality
+All users have the ability to update their profile.
+- **Admin** - Manage users, Create users, Manage sessions, Manage tutor applications, Activity Logs
+- **Student** - Request tutor, Tutor application, Manage requests
+- **Tutor** - View my schedule, Manage sessions requests
 
-Admin Functionality 2/4 complete
-- http://127.0.0.1:5000/admin/manage/users
-- http://127.0.0.1:5000/admin/manage/logs
-- http://127.0.0.1:5000/admin/create-user 
+

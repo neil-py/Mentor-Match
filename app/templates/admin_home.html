@@ -15,14 +15,14 @@
     <button class="dashboard-button" id="manageUsersBtn"
         style="background-color: {% if show_manage_users %} #AC8616 {% endif %};">MANAGE USERS</button>
     <button class="dashboard-button" id="manageSessionsBtn" style="background-color: {% if show_session_requests %} #AC8616 {% endif %};">MANAGE SESSIONS</button>
-    <button class="dashboard-button" id="tutorApplicationBtn">TUTOR APPLICATIONS</button>
+    <button class="dashboard-button" id="tutorApplicationBtn" style="background-color: {% if show_tutor_applications %} #AC8616 {% endif %};">TUTOR APPLICATIONS</button>
     <button class="dashboard-button" id="activityLogsBtn"
         style="background-color: {% if show_manage_logs %} #AC8616 {% endif %};">ACTIVITY LOGS</button>
 </div>
 
 <div class="content">
     <!-- Content for different dashboard sections goes here -->
-    {% if not show_manage_users and not show_manage_logs and not show_session_requests %}
+    {% if not show_manage_users and not show_manage_logs and not show_session_requests and not show_tutor_applications %}
     <div class="dash-info">
         <div class="welcome-message">
             <h1>Welcome {{current_user.first_name}}</h1>
@@ -40,8 +40,8 @@
                 <input type="text" class="manage-block-search-bar" placeholder="Search users...">
                 <select class="manage-block-filter-dropdown">
                     <option value="all">All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="active">Tutor</option>
+                    <option value="inactive">Student</option>
                 </select>
             </div>
             {% if users %}
@@ -120,6 +120,40 @@
             {% endfor %}
             {% else %}
             <h1>No Requests found.</h1>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- MANAGE TUTOR APPLICATIONS HIDDEN DEFAULT-->
+    <div id="manage-users" style="display: {% if show_tutor_applications %} block {% else %}none{% endif %};">
+        <h1>Manage Tutor Applications</h1>
+        <div class="manage-block-container" id="manageUsersContent" style="display: block;">
+            <div class="header">
+                <input type="text" class="manage-block-search-bar" placeholder="Search users...">
+                <select class="manage-block-filter-dropdown">
+                    <option value="all">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            {% if applications %}
+            {% for application in applications %}
+            <div class="manage-block-user-box">
+                <div class="manage-block-user-info">
+                    <div class="user-circle-list"></div>
+                    <p class="user-name">{{ application.student.first_name + " " + application.student.last_name + " " + "(" + application.student.university_number + ")"}}</p>
+                    <p class="account-type-lable">{{ application.student.program }}</p> 
+                </div>
+                <div class="manage-block-manage-button-container">
+                    <button class="manage-block-manage-button"
+                        onclick="location.href = '{{url_for('admin_redirects.manage_tutor_application_page', id=application.id)}}';">MANAGE</button>
+                </div>
+
+            </div>
+            {% endfor %}
+            {% else %}
+            <h1>No users found.</h1>
             {% endif %}
         </div>
     </div>
@@ -226,7 +260,7 @@
 
     .manage-block-container {
         max-width: 100%;
-
+        min-height: 60vh;
         max-height: 60vh;
         margin: 0 auto;
         padding: 20px;
@@ -454,12 +488,7 @@
     });
 
     tutorApplicationBtn.addEventListener('click', () => {
-        clearContent();
-        // Add content for "Tutor Application" section here
-        content.innerHTML = '<h1>Tutor Application</h1>';
-        clearButtonClear();
-        tutorApplicationBtn.style.backgroundColor = '#AC8616'; // Change the clicked button color
-        manageUsersContent.style.display = 'none'; // Hide the "Manage Users" content
+        location.href = "{{ url_for('admin_redirects.manage_tutor_applications')}}"
     });
 
     activityLogsBtn.addEventListener('click', () => {
