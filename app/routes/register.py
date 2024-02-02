@@ -33,7 +33,7 @@ def register():
                 password=password,
                 account_status=3,  # default for creating a student account (tutee)
                 tags="",
-                profile_pic=""
+                #profile_pic=""
             )
 
             db.session.add(new_user)
