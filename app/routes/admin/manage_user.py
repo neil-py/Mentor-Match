@@ -16,6 +16,7 @@ def manage_user(id):
     check_form = form.validate_on_submit()
 
     if check_form:
+        oldUserPass = user.password
         form.populate_obj(user)
         new_password = form.password.data
         if new_password:
@@ -24,6 +25,10 @@ def manage_user(id):
             print(hashed_password)
             user.password = hashed_password
         db.session.commit()
+        # Revert the override from the form's empty password field
+        if user.password == "":
+            user.password = oldUserPass
+            db.session.commit()
 
 
         flash('User information updated successfully', 'success')
