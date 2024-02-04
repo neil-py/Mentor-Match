@@ -55,7 +55,7 @@
                     {% set available = {'value': True}%}
                     {% if tutor_sessions %}
                     {% for session in tutor_sessions %}
-                    {% if session.session_time == time_slot and session.session_date | string == days_date[day] %}
+                    {% if session.session_time == time_slot and session.session_date | string == days_date[day] and session.session_status != 'denied' %}
                     <td data-day="{{ day }}" data-time="{{ time_slot }}"
                     style=" {% if session.session_status == 'confirmed' %}background-color: #006400 {% else %} background-color: #EEC148 {% endif %}; color: #FFFFFF;"
                     onclick="location.href='{{url_for('tutor_redirects.manage_session', id=session.id)}}'"

@@ -82,7 +82,6 @@ def session_requests():
         .order_by(sessions.Sessions.session_date.asc()) \
         .all()
     
-    print(requests)
     return render_template("tutor_home.html",
                            show_my_schedule=False, 
                            show_session_requests=True,
@@ -108,5 +107,15 @@ def accept_session(id):
 
     if session_update:
         session_update.session_status = 'accepted'
+        db.session.commit()
+        return redirect(url_for('tutor_redirects.manage_session', id=id))
+    
+@tutor_redirects_route.route('/tutor/deny/session/<id>')
+@login_required
+def deny_session(id):
+    session_update = sessions.Sessions.query.get(id)
+
+    if session_update:
+        session_update.session_status = 'denied'
         db.session.commit()
         return redirect(url_for('tutor_redirects.manage_session', id=id))

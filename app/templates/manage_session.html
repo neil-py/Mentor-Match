@@ -33,10 +33,10 @@
             <p><strong>Communication Channel:</strong> {{ session.communication_channel }}</p>
         </div>
 
-        {% if session.session_status != 'accepted' %}
+        {% if session.session_status == 'requested' %}
         <div class="btn-group">
             <button class="btn-success" id="cancel-btn" style="font-weight: bold;" onclick="location.href='{{url_for('tutor_redirects.accept_session', id=session.id)}}'">ACCEPT</button>
-            <button class="btn-cancel" id="cancel-btn" style="font-weight: bold;">DENY</button>
+            <button class="btn-cancel" id="cancel-btn" style="font-weight: bold;" onclick="location.href='{{url_for('tutor_redirects.deny_session', id=session.id)}}'">DENY</button>
 
         </div>
         {% endif %}

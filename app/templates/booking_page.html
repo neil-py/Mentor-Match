@@ -38,7 +38,7 @@
                 {% set available = {'value': True}%}
                 {% if tutor_sessions %}
                 {% for session in tutor_sessions %}
-                {% if session.session_time == time_slot and session.session_date | string == days_date[day] %}
+                {% if session.session_time == time_slot and session.session_date | string == days_date[day] and session.session_status != 'denied'%}
                 <td data-day="{{ day }}" data-time="{{ time_slot }}" style="background-color: #E3A90C;">NOT AVAILABLE
                 </td>
                 {% if available.update({'value':False})%}{% endif %}
