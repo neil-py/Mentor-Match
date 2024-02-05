@@ -18,7 +18,9 @@ def register():
     
     form = registration.RegistrationForm()
     check_form = form.validate_on_submit()
+    print(check_form)
     if check_form:
+        print("test")
         login_name = form.login_name.data
         university_email = form.university_email.data
         try:
@@ -47,6 +49,7 @@ def register():
             flash(str(e), 'ERROR')
             db.session.rollback()
     else:
+        print("error")
         try:
             login_name = form.login_name.data
             university_email = form.university_email.data

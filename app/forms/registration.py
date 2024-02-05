@@ -13,7 +13,6 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired(), Length(min=1, max=100)])
     register = SubmitField('Register')
 
-
     #perform checks if the login_name and email already exist in the database
     def validate_login_name(self, field):
         if users.Users.is_login_name_taken(field.data):

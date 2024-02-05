@@ -1,0 +1,66 @@
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #5A110C;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+
+  h1 {
+    color: #FFE085;
+  }
+
+  img {
+    padding-top: 50px;
+    width: 40%;
+  }
+
+  .container {
+    text-align: center;
+  }
+  
+  .jumbotron {
+    background-color: #E8DFC7;
+    border-radius: 10px;
+    padding: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-control {
+    width: calc(100% - 22px);
+
+    padding: 20px;
+    border: 0px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  .btn-success {
+    background-color: #371513;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  
+  a {
+    text-decoration: none;
+    color: #FFE085;
+    font-weight: bold;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
